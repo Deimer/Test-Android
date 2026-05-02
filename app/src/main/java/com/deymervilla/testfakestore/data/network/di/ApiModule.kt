@@ -41,7 +41,7 @@ object ApiModule {
     }
 
     @Provides
-    fun provideApiApi(): ApiService {
+    fun provideApi(): ApiService {
         return provideRetrofitApi()
             .create(ApiService::class.java)
     }
