@@ -8,7 +8,8 @@ object NetworkConstants {
     }
 
     object PARAMETERS {
-        const val PARAMETER_CHARACTER = "productId"
+        const val PARAMETER_PRODUCT = "productId"
+        const val PARAMETER_USER = "userId"
     }
 
     object URLs {
