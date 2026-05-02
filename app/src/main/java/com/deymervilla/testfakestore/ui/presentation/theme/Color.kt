@@ -1,4 +1,4 @@
-package com.deymervilla.testfakestore.ui.theme
+package com.deymervilla.testfakestore.ui.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
