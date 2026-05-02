@@ -7,6 +7,11 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+val urlDebug = providers.gradleProperty("URL_DEBUG").get()
+val urlRelease = providers.gradleProperty("URL_RELEASE").get()
+val databaseDebug = providers.gradleProperty("DATABASE_DEBUG").get()
+val databaseRelease = providers.gradleProperty("DATABASE_RELEASE").get()
+
 android {
     namespace = "com.deymervilla.testfakestore"
     compileSdk {
@@ -27,11 +32,30 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField(
+                "String", "BASE_URL", urlDebug
+            )
+            buildConfigField(
+                "String", "DATABASE_NAME", databaseDebug
+            )
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
+            )
+            buildConfigField(
+                "String", "BASE_URL", urlRelease
+            )
+            buildConfigField(
+                "String", "DATABASE_NAME", databaseRelease
             )
         }
     }
