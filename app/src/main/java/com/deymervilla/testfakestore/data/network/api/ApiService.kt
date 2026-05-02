@@ -23,6 +23,6 @@ interface ApiService {
 
     @GET(USER_PATH)
     suspend fun getUserById(
-        @Query(PARAMETER_USER) name: String
+        @Query(PARAMETER_USER) userId: Int
     ): UserDTO
 }
