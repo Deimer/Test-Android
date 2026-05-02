@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.ksp)
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -12,12 +15,15 @@ android {
 
     defaultConfig {
         applicationId = "com.deymervilla.testfakestore"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -30,31 +36,78 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
 dependencies {
+    //Kotlin
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
+    //Lifecycle
+    implementation(libs.lifecycle.runtime.ktx)
+    //DI
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit.converter.gson)
+    //Room database
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    //Compose
+    implementation(libs.activity.compose)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.graphics)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.material3)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.constraintlayout)
+    debugImplementation(libs.compose.ui.tooling)
+    //Navigation
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+    //Animation
+    implementation(libs.lottie)
+    implementation(libs.animation.graphics)
+    //Image
+    implementation(libs.coil)
+    //Navigation
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
+    //Tests Compose
+    debugImplementation(libs.compose.test.manifest)
+    androidTestImplementation(libs.test.junit4)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(platform(libs.compose.bom))
+    //Test
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.androidx.core.ktx)
+    androidTestImplementation(libs.androidx.archCore.testing)
+    //Robolectric
+    testImplementation(libs.robolectric.test)
+    //Mockito
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.coroutines.test)
 }
