@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    suspend fun fetchUser(userId: Int): Flow<Result<UserModel>>
+    fun fetchUser(userId: Int): Flow<Result<UserModel>>
 }

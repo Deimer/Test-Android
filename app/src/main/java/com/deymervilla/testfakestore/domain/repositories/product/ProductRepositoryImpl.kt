@@ -32,11 +32,11 @@ class ProductRepositoryImpl @Inject constructor(
 
     override fun fetchById(productId: Int) = flow {
         val result: Result<ProductModel> = try {
-            productLocalDataSource.fetchById(productId)?.toModel()?.let { character ->
-                Result.success(character)
+            productLocalDataSource.fetchById(productId)?.toModel()?.let { product ->
+                Result.success(product)
             } ?: run {
-                productRemoteDataSource.getProductById(productId)?.toModel()?.let { character ->
-                    Result.success(character)
+                productRemoteDataSource.getProductById(productId)?.toModel()?.let { product ->
+                    Result.success(product)
                 } ?: Result.failure(NoSuchElementException(""))
             }
         } catch (ioException: IOException) {
@@ -62,8 +62,8 @@ class ProductRepositoryImpl @Inject constructor(
         productId: Int,
         isFavorite: Boolean
     ) = flow {
-        productLocalDataSource.fetchById(productId)?.let { character ->
-            productLocalDataSource.update(character.copy(isFavorite = isFavorite))
+        productLocalDataSource.fetchById(productId)?.let { product ->
+            productLocalDataSource.update(product.copy(isFavorite = isFavorite))
             emit(value = Result.success(true))
         } ?: run {
             emit(value = Result.success(false))

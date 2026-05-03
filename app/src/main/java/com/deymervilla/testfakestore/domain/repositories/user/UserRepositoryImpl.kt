@@ -14,7 +14,7 @@ class UserRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource
 ): UserRepository {
 
-    override suspend fun fetchUser(userId: Int) = flow {
+    override fun fetchUser(userId: Int) = flow {
         val result: Result<UserModel> = try {
             userLocalDataSource.fetchById(userId)?.toModel()?.let { character ->
                 Result.success(character)
