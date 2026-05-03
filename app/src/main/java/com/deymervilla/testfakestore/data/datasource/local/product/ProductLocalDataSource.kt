@@ -12,7 +12,7 @@ interface ProductLocalDataSource {
         title: String
     ): List<ProductEntity>
 
-    suspend fun fetchAll(): List<ProductEntity>
+    suspend fun fetch(): List<ProductEntity>
 
     suspend fun fetchFavorites(): List<ProductEntity>
 
@@ -22,5 +22,5 @@ interface ProductLocalDataSource {
 
     suspend fun delete(product: ProductEntity): Boolean
 
-    suspend fun deleteAll(): Boolean
+    suspend fun delete(): Boolean
 }

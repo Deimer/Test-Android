@@ -14,7 +14,7 @@ class ProductLocalDataSourceImpl @Inject constructor(
     override suspend fun fetchByTitle(title: String) =
         productDao.fetchByTitle(title)
 
-    override suspend fun fetchAll() =
+    override suspend fun fetch() =
         productDao.fetchAll()
 
     override suspend fun fetchFavorites() =
@@ -31,6 +31,6 @@ class ProductLocalDataSourceImpl @Inject constructor(
     override suspend fun delete(product: ProductEntity) =
         productDao.delete(product) == 1
 
-    override suspend fun deleteAll() =
+    override suspend fun delete() =
         productDao.delete() == 1
 }
