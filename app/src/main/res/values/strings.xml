@@ -9,4 +9,7 @@
     <string name="connection_error_message">There was an error connecting to the server. Please check your internet connection and try again.</string>
     <string name="error_generic">An error occurred. Please try again later.</string>
 
+    <string name="title_welcome">Technical Test Android</string>
+    <string name="legend_welcome">A catalog application designed to explore and manage the wide variety of products provided by the Fake Store API for technical assessments.</string>
+
 </resources>
