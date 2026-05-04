@@ -5,4 +5,8 @@
     <string name="change">Change</string>
     <string name="see_all">See all</string>
 
+    <string name="connection_error">Connection Error</string>
+    <string name="connection_error_message">There was an error connecting to the server. Please check your internet connection and try again.</string>
+    <string name="error_generic">An error occurred. Please try again later.</string>
+
 </resources>
