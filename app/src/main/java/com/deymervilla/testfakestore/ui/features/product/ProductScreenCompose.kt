@@ -20,7 +20,7 @@ import com.deymervilla.testfakestore.ui.presentation.components.BannerCompose
 import com.deymervilla.testfakestore.ui.presentation.components.TopBarCompose
 
 @Composable
-fun CharacterScreenCompose(
+fun ProductScreenCompose(
     viewModel: ProductScreenViewModel = hiltViewModel(),
     attributes: ProductScreenAttributes
 ) {
