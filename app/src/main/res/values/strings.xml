@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Fake Store</string>
+
+    <string name="retry">Retry</string>
+    <string name="change">Change</string>
+    <string name="see_all">See all</string>
+
 </resources>

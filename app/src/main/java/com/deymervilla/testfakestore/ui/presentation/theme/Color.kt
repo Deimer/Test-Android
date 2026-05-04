@@ -8,3 +8,5 @@ val MidGray = Color(0xFF797979)
 val LightSurface = Color(0xFFE0E0E0)
 val DarkSurface = Color(0xFF333333)
 val White = Color.White
+val White80 = Color(0xCCFFFFFF)
+val LightGray = Color(0xFFF7F7F7)

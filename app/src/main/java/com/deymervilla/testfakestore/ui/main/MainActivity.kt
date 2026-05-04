@@ -1,4 +1,4 @@
-package com.deymervilla.testfakestore
+package com.deymervilla.testfakestore.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

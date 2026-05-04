@@ -102,6 +102,7 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.constraintlayout)
     debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.compose.icons.core)
     //Navigation
     implementation(libs.navigation3.runtime)
     implementation(libs.navigation3.ui)
