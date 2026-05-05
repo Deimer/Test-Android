@@ -42,7 +42,8 @@ fun HomeScreenCompose(
             userLocation = userLocation,
             actions = attributes.actions,
             productList = productList,
-            favoriteList = favoriteList
+            favoriteList = favoriteList,
+            onLocationClick = viewModel::fetchUserLocation
         )
         is HomeUiState.Loading -> LoadingScreenCompose()
         is HomeUiState.ConnectionError -> ConnectionErrorScreenCompose()
@@ -59,6 +60,7 @@ private fun BodyCompose(
     actions: HomeScreenActions,
     productList: List<ProductModel>,
     favoriteList: List<ProductModel>,
+    onLocationClick: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         HomeToolbar(
@@ -66,8 +68,8 @@ private fun BodyCompose(
             searchQuery = "",
             onSearchChange = {},
             onFilterClick = {},
-            onProfileClick = { actions.onPrimaryAction },
-            onLocationClick = {}
+            onProfileClick = { actions.onTertiaryAction.invoke() },
+            onLocationClick = { onLocationClick.invoke() }
         )
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -168,7 +170,8 @@ private fun BodyComposePreview() {
                 onTertiaryAction = {},
             ),
             productList = mockProducts,
-            favoriteList = mockProducts
+            favoriteList = mockProducts,
+            onLocationClick = {}
         )
     }
 }

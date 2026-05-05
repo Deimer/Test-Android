@@ -3,10 +3,9 @@ package com.deymervilla.testfakestore.domain.usecases.user
 import com.deymervilla.testfakestore.domain.repositories.user.UserRepository
 import javax.inject.Inject
 
-class FetchUserUseCase @Inject constructor(
+class FetchUserLocationUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
 
-    operator fun invoke(userId: Int) =
-        userRepository.fetch(userId)
+    operator fun invoke() = userRepository.location()
 }

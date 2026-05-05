@@ -22,4 +22,10 @@
     <string name="price">Price</string>
     <string name="category">Category</string>
 
+    <string name="your_profile">Your Profile</string>
+    <string name="full_name">Full name</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="full_address">Full address</string>
+
 </resources>

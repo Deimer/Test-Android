@@ -18,6 +18,9 @@ import com.deymervilla.testfakestore.ui.features.home.HomeScreenCompose
 import com.deymervilla.testfakestore.ui.features.product.ProductScreenActions
 import com.deymervilla.testfakestore.ui.features.product.ProductScreenAttributes
 import com.deymervilla.testfakestore.ui.features.product.ProductScreenCompose
+import com.deymervilla.testfakestore.ui.features.profile.ProfileScreenActions
+import com.deymervilla.testfakestore.ui.features.profile.ProfileScreenAttributes
+import com.deymervilla.testfakestore.ui.features.profile.ProfileScreenCompose
 import com.deymervilla.testfakestore.ui.features.splash.SplashScreenActions
 import com.deymervilla.testfakestore.ui.features.splash.SplashScreenCompose
 import com.deymervilla.testfakestore.ui.presentation.components.SnackBarCompose
@@ -89,6 +92,16 @@ private fun BodyCompose(
                     productId = key.productId,
                     snackbarHostState = snackbarHostState,
                     actions = ProductScreenActions(
+                        onPrimaryAction = {
+                            backStack.removeLastOrNull()
+                        },
+                    ),
+                ))
+            }
+            entry<AppRoutes.ProfileScreen> { key ->
+                ProfileScreenCompose(attributes = ProfileScreenAttributes(
+                    snackbarHostState = snackbarHostState,
+                    actions = ProfileScreenActions(
                         onPrimaryAction = {
                             backStack.removeLastOrNull()
                         },

@@ -7,7 +7,9 @@ import com.deymervilla.testfakestore.domain.usecases.product.FetchProductByIdUse
 import com.deymervilla.testfakestore.domain.usecases.product.FetchProductsByNameUseCase
 import com.deymervilla.testfakestore.domain.usecases.product.FetchProductsUseCase
 import com.deymervilla.testfakestore.domain.usecases.product.SetProductFavoriteUseCase
+import com.deymervilla.testfakestore.domain.usecases.user.FetchUserLocationUseCase
 import com.deymervilla.testfakestore.domain.usecases.user.FetchUserUseCase
+import com.deymervilla.testfakestore.domain.usecases.user.UpdateUserUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +25,18 @@ object UseCaseModule {
     fun provideFetchUserUseCase(
         userRepository: UserRepository
     ) = FetchUserUseCase(userRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideFetchUserLocationUseCase(
+        userRepository: UserRepository
+    ) = FetchUserLocationUseCase(userRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideUpdateUserUseCase(
+        userRepository: UserRepository
+    ) = UpdateUserUseCase(userRepository)
 
     @Provides
     @ViewModelScoped

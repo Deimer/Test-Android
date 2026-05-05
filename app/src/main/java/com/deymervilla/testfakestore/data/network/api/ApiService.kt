@@ -9,7 +9,6 @@ import com.deymervilla.testfakestore.data.network.dto.ProductDTO
 import com.deymervilla.testfakestore.data.network.dto.UserDTO
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiService {
 
@@ -23,6 +22,6 @@ interface ApiService {
 
     @GET(USER_PATH)
     suspend fun getUserById(
-        @Query(PARAMETER_USER) userId: Int
+        @Path(PARAMETER_USER) userId: Int
     ): UserDTO
 }

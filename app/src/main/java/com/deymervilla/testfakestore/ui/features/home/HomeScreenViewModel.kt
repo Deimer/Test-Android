@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.deymervilla.testfakestore.domain.models.ProductModel
 import com.deymervilla.testfakestore.domain.usecases.product.FetchFavoriteProductsUseCase
 import com.deymervilla.testfakestore.domain.usecases.product.FetchProductsUseCase
-import com.deymervilla.testfakestore.domain.usecases.user.FetchUserUseCase
+import com.deymervilla.testfakestore.domain.usecases.user.FetchUserLocationUseCase
 import com.deymervilla.testfakestore.ui.di.IoDispatcher
 import com.deymervilla.testfakestore.ui.utils.default
 import com.deymervilla.testfakestore.ui.utils.failure
@@ -34,7 +34,7 @@ sealed class HomeUiState {
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val fetchUserUseCase: FetchUserUseCase,
+    private val fetchLocationUserCase: FetchUserLocationUseCase,
     private val fetchProductsUseCase: FetchProductsUseCase,
     private val fetchFavoritesUseCase: FetchFavoriteProductsUseCase
 ): ViewModel() {
@@ -51,13 +51,13 @@ class HomeScreenViewModel @Inject constructor(
     private val _favoriteList = MutableStateFlow<List<ProductModel>>(emptyList())
     val favoriteList: StateFlow<List<ProductModel>> = _favoriteList.asStateFlow()
 
-    init { fetchUser() }
+    init { getProducts() }
 
-    fun fetchUser() {
-        fetchUserUseCase(8).start {
+    fun fetchUserLocation() {
+        fetchLocationUserCase().start {
             _homeUiState.emit(HomeUiState.Loading)
-        }.map { user ->
-            _userLocation.value = user.fullAddress
+        }.map { fullAddress ->
+            _userLocation.value = fullAddress
         }.success {
             _homeUiState.emit(HomeUiState.Success)
         }.failure { exception ->
@@ -67,12 +67,10 @@ class HomeScreenViewModel @Inject constructor(
             exception.default {
                 _homeUiState.emit(HomeUiState.Error(exception.message.orEmpty()))
             }
-        }.onCompletion {
-            getProducts()
         }.launchIn(viewModelScope, ioDispatcher)
     }
 
-    fun getProducts() {
+    private fun getProducts() {
         fetchProductsUseCase().start {
             _homeUiState.emit(HomeUiState.Loading)
         }.map { products ->
@@ -91,7 +89,7 @@ class HomeScreenViewModel @Inject constructor(
         }.launchIn(viewModelScope, ioDispatcher)
     }
 
-    fun getFavorites() {
+    private fun getFavorites() {
         fetchFavoritesUseCase().onEach { favorites ->
             _favoriteList.value = favorites
             _homeUiState.emit(HomeUiState.Success)
