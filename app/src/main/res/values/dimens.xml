@@ -11,7 +11,7 @@
     <dimen name="dimen_8">8dp</dimen>
     <dimen name="dimen_10">10dp</dimen>
     <dimen name="dimen_12">12dp</dimen>
-    <dimen name="dimen_15">15dp</dimen>
+    <dimen name="dimen_14">14dp</dimen>
     <dimen name="dimen_16">16dp</dimen>
     <dimen name="dimen_18">18dp</dimen>
     <dimen name="dimen_20">20dp</dimen>
@@ -32,8 +32,8 @@
     <dimen name="dimen_radio_avatar">130dp</dimen>
     <dimen name="dimen_width_avatar">160dp</dimen>
     <dimen name="dimen_height_avatar">160dp</dimen>
-    <dimen name="dimen_height_banner">230dp</dimen>
+    <dimen name="dimen_height_banner">280dp</dimen>
 
-    <dimen name="dimen_width_card">240</dimen>
+    <dimen name="dimen_width_card">240dp</dimen>
     <dimen name="dimen_height_card">160dp</dimen>
 </resources>

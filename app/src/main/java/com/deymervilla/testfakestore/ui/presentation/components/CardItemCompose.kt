@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,13 +34,14 @@ import coil.compose.AsyncImage
 import com.deymervilla.testfakestore.R
 import com.deymervilla.testfakestore.ui.presentation.theme.ForeverRed
 import com.deymervilla.testfakestore.ui.presentation.theme.White
+import com.deymervilla.testfakestore.ui.utils.toKNotation
 
 data class CardItemUI(
     val id: Int,
     val title: String,
     val subTitle: String,
-    val rating: String,
-    val reviewCount: String,
+    val rating: Float,
+    val reviewCount: Int,
     val imageUrl: String
 )
 
@@ -109,7 +111,7 @@ fun CardItemCompose(
                     )
                     Spacer(modifier = Modifier.width(dimensionResource(R.dimen.dimen_4)))
                     Text(
-                        text = "${item.rating} (${item.reviewCount} Review)",
+                        text = "${item.rating} (${item.reviewCount.toKNotation()} ${stringResource(R.string.reviews)})",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium,
                         color = ForeverRed
@@ -129,8 +131,8 @@ private fun CardItemComposePreview() {
                 id = 1,
                 title = "Hydrating Facial Cream",
                 subTitle = "Skincare - 250ml",
-                rating = "4.9",
-                reviewCount = "850k",
+                rating = 4.9f,
+                reviewCount = 850,
                 imageUrl = "https://example.com/image.jpg"
             ),
             onClick = {}

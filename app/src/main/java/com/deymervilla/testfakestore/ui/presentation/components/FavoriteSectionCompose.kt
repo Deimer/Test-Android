@@ -27,7 +27,7 @@ fun FavoriteSectionCompose(
     title: String,
     items: List<FavoriteItemUI>,
     onSeeAllClick: () -> Unit,
-    onItemClick: (String) -> Unit
+    onItemClick: (Int) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -76,9 +76,9 @@ fun FavoriteSectionCompose(
 @Composable
 private fun FavoriteProductsSectionPreview() {
     val favorites = listOf(
-        FavoriteItemUI("1", "", "4.8"),
-        FavoriteItemUI("2", "", "4.5"),
-        FavoriteItemUI("3", "", "4.9")
+        FavoriteItemUI(1, "", 4.8f),
+        FavoriteItemUI(2, "", 4.5f),
+        FavoriteItemUI(3, "", 4.9f)
     )
 
     FavoriteSectionCompose(

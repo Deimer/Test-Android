@@ -50,8 +50,8 @@ fun HeaderActionsRowCompose(
             )
         ) {
             CircleButtonCompose(
-                icon = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                tint = if (isFavorite) ForeverRed else Black,
+                icon = if(isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                tint = if(isFavorite) ForeverRed else Black,
                 onClick = onFavoriteClick
             )
         }

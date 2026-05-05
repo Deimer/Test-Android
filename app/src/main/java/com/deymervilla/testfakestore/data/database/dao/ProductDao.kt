@@ -11,6 +11,7 @@ import com.deymervilla.testfakestore.data.database.constants.DatabaseConstants.C
 import com.deymervilla.testfakestore.data.database.constants.DatabaseConstants.Columns.TITLE
 import com.deymervilla.testfakestore.data.database.constants.DatabaseConstants.Tables.PRODUCT_TABLE
 import com.deymervilla.testfakestore.data.database.entities.ProductEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductDao {
@@ -37,5 +38,5 @@ interface ProductDao {
     suspend fun fetchByTitle(title: String): List<ProductEntity>
 
     @Query("SELECT * FROM $PRODUCT_TABLE WHERE $IS_FAVORITE = 1")
-    suspend fun fetchFavorites(): List<ProductEntity>
+    fun fetchFavorites(): Flow<List<ProductEntity>>
 }

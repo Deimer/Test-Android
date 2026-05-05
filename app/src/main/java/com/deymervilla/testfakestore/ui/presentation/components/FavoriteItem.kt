@@ -1,5 +1,7 @@
 package com.deymervilla.testfakestore.ui.presentation.components
 
+import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -25,14 +27,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.deymervilla.testfakestore.R
+import com.deymervilla.testfakestore.ui.presentation.theme.FakeStoreTheme
 import com.deymervilla.testfakestore.ui.presentation.theme.ForeverRed
 
 data class FavoriteItemUI(
-    val id: String,
+    val id: Int,
     val imageUrl: String,
-    val rating: String,
+    val rating: Float,
     val isFavorite: Boolean = true
 )
 
@@ -40,7 +44,7 @@ data class FavoriteItemUI(
 fun FavoriteCard(
     modifier: Modifier = Modifier,
     item: FavoriteItemUI,
-    onClick: (String) -> Unit
+    onClick: (Int) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -90,17 +94,38 @@ fun FavoriteCard(
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
-                        tint = Color(0xFFFFB400),
+                        tint = ForeverRed,
                         modifier = Modifier.size(dimensionResource(R.dimen.dimen_16))
                     )
                     Spacer(modifier = Modifier.width(dimensionResource(R.dimen.dimen_4)))
                     Text(
-                        text = item.rating,
+                        text = item.rating.toString(),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Bold
                     )
                 }
             }
+        }
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun FavoriteCardPreview() {
+    FakeStoreTheme {
+        Box(
+            modifier = Modifier
+                .padding(dimensionResource(R.dimen.dimen_16))
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            FavoriteCard(
+                item = FavoriteItemUI(
+                    id = 1,
+                    imageUrl = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+                    rating = 4.5f
+                ),
+                onClick = {}
+            )
         }
     }
 }

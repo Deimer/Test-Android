@@ -55,7 +55,7 @@ fun FakeStoreTheme(
         SideEffect {
             val window = (view.context as Activity).window
             val insetsController = WindowCompat.getInsetsController(window, view)
-            insetsController.isAppearanceLightStatusBars = !darkTheme
+            insetsController.isAppearanceLightStatusBars = true
         }
     }
 

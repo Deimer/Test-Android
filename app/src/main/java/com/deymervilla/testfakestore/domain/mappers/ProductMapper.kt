@@ -38,8 +38,8 @@ fun ProductEntity.toModel(): ProductModel {
         description = this.description,
         category = this.category,
         imageUrl = this.image,
-        ratingCount = this.rate.toInt(),
-        ratingLabel = this.count.toFloat(),
+        ratingCount = this.count,
+        ratingLabel = this.rate.toFloat(),
         isFavorite = this.isFavorite
     )
 }

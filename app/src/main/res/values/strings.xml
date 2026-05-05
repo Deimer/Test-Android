@@ -17,5 +17,9 @@
     <string name="filter">Filter</string>
     <string name="profile">Profile</string>
     <string name="set_location">Set your delivery address</string>
+    <string name="your_favorites">Your favorites</string>
+    <string name="reviews">Reviews</string>
+    <string name="price">Price</string>
+    <string name="category">Category</string>
 
 </resources>

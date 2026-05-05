@@ -19,7 +19,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 sealed class HomeUiState {
@@ -45,6 +47,9 @@ class HomeScreenViewModel @Inject constructor(
 
     private val _productList = MutableStateFlow<List<ProductModel>>(emptyList())
     val productList: StateFlow<List<ProductModel>> = _productList.asStateFlow()
+
+    private val _favoriteList = MutableStateFlow<List<ProductModel>>(emptyList())
+    val favoriteList: StateFlow<List<ProductModel>> = _favoriteList.asStateFlow()
 
     init { fetchUser() }
 
@@ -81,6 +86,18 @@ class HomeScreenViewModel @Inject constructor(
             exception.default {
                 _homeUiState.emit(HomeUiState.Error(exception.message.orEmpty()))
             }
+        }.onCompletion {
+            getFavorites()
         }.launchIn(viewModelScope, ioDispatcher)
+    }
+
+    fun getFavorites() {
+        fetchFavoritesUseCase().onEach { favorites ->
+            _favoriteList.value = favorites
+            _homeUiState.emit(HomeUiState.Success)
+        }.catch { exception ->
+            _homeUiState.emit(HomeUiState.Error(exception.message))
+        }
+        .launchIn(viewModelScope, ioDispatcher)
     }
 }

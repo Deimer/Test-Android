@@ -17,7 +17,7 @@ class ProductLocalDataSourceImpl @Inject constructor(
     override suspend fun fetch() =
         productDao.fetchAll()
 
-    override suspend fun fetchFavorites() =
+    override fun fetchFavorites() =
         productDao.fetchFavorites()
 
     override suspend fun insert(products: List<ProductEntity>): Boolean {

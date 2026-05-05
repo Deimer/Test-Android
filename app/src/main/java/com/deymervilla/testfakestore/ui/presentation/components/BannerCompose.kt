@@ -6,17 +6,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.deymervilla.testfakestore.R
+import com.deymervilla.testfakestore.ui.presentation.theme.DarkSurface
 
 @Composable
 fun BannerCompose(
@@ -32,44 +34,55 @@ fun BannerCompose(
         modifier = modifier
             .fillMaxWidth()
             .height(dimensionResource(id = R.dimen.dimen_height_banner))
+            .padding(horizontal = dimensionResource(R.dimen.dimen_16))
+            .padding(bottom = dimensionResource(R.dimen.dimen_24))
     ) {
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        Card(
             modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(
-                    topStart = dimensionResource(R.dimen.dimen_24),
-                    topEnd = dimensionResource(R.dimen.dimen_24)
-                ))
-        )
-        HeaderActionsRowCompose(
-            isFavorite = isFavorite,
-            onBackClick = onBackClick,
-            onFavoriteClick = onFavoriteClick
-        )
+                .fillMaxWidth()
+                .height(dimensionResource(R.dimen.dimen_height_banner)),
+            shape = RoundedCornerShape(dimensionResource(R.dimen.dimen_24)),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = dimensionResource(R.dimen.dimen_4)
+            ),
+            colors = CardDefaults.cardColors(containerColor = DarkSurface)
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+                HeaderActionsRowCompose(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .padding(horizontal = dimensionResource(R.dimen.dimen_16)),
+                    isFavorite = isFavorite,
+                    onBackClick = onBackClick,
+                    onFavoriteClick = onFavoriteClick
+                )
+            }
+        }
         RatingCompose(
             rating = rating,
             reviewCount = reviewCount,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .offset(y = (-12).dp)
+                .offset(y = dimensionResource(R.dimen.dimen_14))
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun BannerComposePreview() {
-    Box(modifier = Modifier.padding(16.dp)) {
-        BannerCompose(
-            imageUrl = "https://example.com/salon_image.jpg",
-            rating = 4.8f,
-            reviewCount = 1024,
-            isFavorite = true,
-            onBackClick = {},
-            onFavoriteClick = {}
-        )
-    }
+    BannerCompose(
+        imageUrl = "https://example.com/salon_image.jpg",
+        rating = 4.8f,
+        reviewCount = 1024,
+        isFavorite = true,
+        onBackClick = {},
+        onFavoriteClick = {}
+    )
 }

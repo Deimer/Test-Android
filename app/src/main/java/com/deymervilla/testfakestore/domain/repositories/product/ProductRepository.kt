@@ -20,5 +20,5 @@ interface ProductRepository {
         isFavorite: Boolean
     ): Flow<Result<Boolean>>
 
-    fun fetchFavorites(): Flow<Result<List<ProductModel>>>
+    fun fetchFavorites(): Flow<List<ProductModel>>
 }

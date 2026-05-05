@@ -18,11 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.deymervilla.testfakestore.R
 import com.deymervilla.testfakestore.ui.presentation.theme.ForeverRed
 import com.deymervilla.testfakestore.ui.presentation.theme.White
 import com.deymervilla.testfakestore.ui.presentation.theme.tagButton
+import com.deymervilla.testfakestore.ui.utils.toKNotation
 
 @Composable
 fun RatingCompose(
@@ -51,7 +53,7 @@ fun RatingCompose(
             )
             Spacer(Modifier.width(dimensionResource(R.dimen.dimen_4)))
             Text(
-                text = "$rating ($reviewCount Review)",
+                text = "$rating (${reviewCount.toKNotation()} ${stringResource(R.string.reviews)})",
                 style = tagButton,
             )
         }

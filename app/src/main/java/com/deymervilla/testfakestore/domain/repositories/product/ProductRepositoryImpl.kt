@@ -5,7 +5,9 @@ import com.deymervilla.testfakestore.data.datasource.remote.product.ProductRemot
 import com.deymervilla.testfakestore.domain.mappers.toEntity
 import com.deymervilla.testfakestore.domain.mappers.toModel
 import com.deymervilla.testfakestore.domain.models.ProductModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import java.io.IOException
 import java.lang.Exception
 import javax.inject.Inject
@@ -70,14 +72,10 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun fetchFavorites() = flow {
-        try {
-            val products = productLocalDataSource.fetchFavorites().map { it.toModel() }
-            emit(value = Result.success(products))
-        } catch (ioException: IOException) {
-            emit(value = Result.failure(ioException))
-        } catch (exception: Exception) {
-            emit(value = Result.failure(exception))
-        }
+    override fun fetchFavorites(): Flow<List<ProductModel>> {
+        return productLocalDataSource.fetchFavorites()
+            .map { entities ->
+                entities.map { it.toModel() }
+            }
     }
 }

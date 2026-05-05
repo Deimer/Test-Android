@@ -48,7 +48,7 @@ fun TopBarCompose(
         if (subtitle.isNotEmpty()) {
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(
                     start = dimensionResource(id = R.dimen.dimen_16),
                     end = dimensionResource(id = R.dimen.dimen_16),

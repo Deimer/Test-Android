@@ -1,8 +1,10 @@
 package com.deymervilla.testfakestore.ui.features.product
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -10,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.deymervilla.testfakestore.R
@@ -17,7 +20,10 @@ import com.deymervilla.testfakestore.domain.models.ProductModel
 import com.deymervilla.testfakestore.ui.features.alerts.ErrorDetailCompose
 import com.deymervilla.testfakestore.ui.features.alerts.LoadingScreenCompose
 import com.deymervilla.testfakestore.ui.presentation.components.BannerCompose
+import com.deymervilla.testfakestore.ui.presentation.components.ItemRowCompose
 import com.deymervilla.testfakestore.ui.presentation.components.TopBarCompose
+import com.deymervilla.testfakestore.ui.presentation.theme.FakeStoreTheme
+import com.deymervilla.testfakestore.ui.utils.toUsd
 
 @Composable
 fun ProductScreenCompose(
@@ -56,13 +62,25 @@ private fun BodyCompose(
             rating = productModel.ratingLabel,
             reviewCount = productModel.ratingCount,
             isFavorite = productModel.isFavorite,
-            onBackClick = { actions.onPrimaryAction },
-            onFavoriteClick = { onClickFavorite }
+            onBackClick = { actions.onPrimaryAction.invoke() },
+            onFavoriteClick = { onClickFavorite.invoke() }
         )
         TopBarCompose(
             modifier = Modifier.padding(top = dimensionResource(R.dimen.dimen_16)),
             title = productModel.title,
             subtitle = productModel.description,
+        )
+        Spacer(Modifier.width(dimensionResource(R.dimen.dimen_8)))
+        ItemRowCompose(
+            modifier = Modifier.padding(dimensionResource(R.dimen.dimen_16)),
+            title = stringResource(R.string.price),
+            trailingText = productModel.rawPrice.toUsd()
+        )
+        Spacer(Modifier.width(dimensionResource(R.dimen.dimen_8)))
+        ItemRowCompose(
+            modifier = Modifier.padding(dimensionResource(R.dimen.dimen_16)),
+            title = stringResource(R.string.category),
+            trailingText = productModel.category
         )
     }
 }
@@ -81,14 +99,16 @@ private fun BodyComposePreview() {
         ratingLabel = 4.8f,
         isFavorite = true
     )
-    Surface(
-        color = Color.White,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        BodyCompose(
-            actions = ProductScreenActions(onPrimaryAction = {}),
-            onClickFavorite = { println("Favorite toggled") },
-            productModel = mockProduct
-        )
+    FakeStoreTheme {
+        Surface(
+            color = Color.White,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            BodyCompose(
+                actions = ProductScreenActions(onPrimaryAction = {}),
+                onClickFavorite = { println("Favorite toggled") },
+                productModel = mockProduct
+            )
+        }
     }
 }

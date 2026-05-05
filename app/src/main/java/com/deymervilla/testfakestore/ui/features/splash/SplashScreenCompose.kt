@@ -40,7 +40,7 @@ private fun BodyContent(
         LottieCompose(
             rawRes = R.raw.ic_welcome,
             size = dimensionResource(id = R.dimen.dimen_180),
-            iterations = 3,
+            iterations = 1,
             onAnimationEnd = { actions.onPrimaryAction.invoke() }
         )
         Column(

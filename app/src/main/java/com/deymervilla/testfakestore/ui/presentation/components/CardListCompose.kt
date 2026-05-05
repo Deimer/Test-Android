@@ -1,10 +1,10 @@
 package com.deymervilla.testfakestore.ui.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,12 +19,13 @@ fun CardListCompose(
     items: List<CardItemUI>,
     onItemClick: (Int) -> Unit
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(dimensionResource(R.dimen.dimen_16)),
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.dimen_16)),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.dimen_12))
     ) {
-        items(items, key = { it.id }) { item ->
+        items.forEach { item ->
             CardItemCompose(
                 item = item,
                 onClick = onItemClick
@@ -41,24 +42,24 @@ private fun GenericCardListPreview() {
             id = 1,
             title = "Vitamin C Serum",
             subTitle = "Glow Labs - 30ml",
-            rating = "4.8",
-            reviewCount = "1.2k",
+            rating = 4.8f,
+            reviewCount = 120,
             imageUrl = ""
         ),
         CardItemUI(
             id = 2,
             title = "Anti-Hair Loss Shampoo",
             subTitle = "Professional Care Line",
-            rating = "4.7",
-            reviewCount = "500",
+            rating = 4.7f,
+            reviewCount = 500,
             imageUrl = ""
         ),
         CardItemUI(
             id = 3,
             title = "Sunscreen SPF 50",
             subTitle = "Total Protection - All skin types",
-            rating = "4.9",
-            reviewCount = "2.1k",
+            rating = 4.9f,
+            reviewCount = 240,
             imageUrl = ""
         )
     )

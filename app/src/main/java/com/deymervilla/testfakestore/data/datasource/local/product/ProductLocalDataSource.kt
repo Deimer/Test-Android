@@ -1,6 +1,7 @@
 package com.deymervilla.testfakestore.data.datasource.local.product
 
 import com.deymervilla.testfakestore.data.database.entities.ProductEntity
+import kotlinx.coroutines.flow.Flow
 
 interface ProductLocalDataSource {
 
@@ -14,7 +15,7 @@ interface ProductLocalDataSource {
 
     suspend fun fetch(): List<ProductEntity>
 
-    suspend fun fetchFavorites(): List<ProductEntity>
+    fun fetchFavorites(): Flow<List<ProductEntity>>
 
     suspend fun insert(products: List<ProductEntity>): Boolean
 
