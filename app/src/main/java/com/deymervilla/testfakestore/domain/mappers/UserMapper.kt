@@ -3,6 +3,7 @@ package com.deymervilla.testfakestore.domain.mappers
 import com.deymervilla.testfakestore.data.database.entities.UserEntity
 import com.deymervilla.testfakestore.data.network.dto.UserDTO
 import com.deymervilla.testfakestore.domain.models.UserModel
+import com.deymervilla.testfakestore.domain.utils.capitalizeWords
 import com.deymervilla.testfakestore.domain.utils.orZero
 
 fun UserDTO.toModel() = UserModel(
@@ -10,10 +11,10 @@ fun UserDTO.toModel() = UserModel(
     username = username.orEmpty(),
     email = email.orEmpty(),
     phone = phone.orEmpty(),
-    firstName = name?.firstName.orEmpty(),
-    lastName = name?.lastName.orEmpty(),
-    city = address?.city.orEmpty(),
-    street = address?.street.orEmpty(),
+    firstName = name?.firstName.capitalizeWords(),
+    lastName = name?.lastName.capitalizeWords(),
+    city = address?.city.capitalizeWords(),
+    street = address?.street.capitalizeWords(),
     number = address?.number.orZero(),
     zipcode = address?.zipcode.orEmpty(),
     latitude = address?.geolocation?.latitude.orEmpty(),
@@ -57,10 +58,10 @@ fun UserModel.toEntity() = UserEntity(
     email = email,
     username = username,
     phone = phone,
-    firstName = firstName,
-    lastName = lastName,
-    city = city,
-    street = street,
+    firstName = firstName.capitalizeWords(),
+    lastName = lastName.capitalizeWords(),
+    city = city.capitalizeWords(),
+    street = street.capitalizeWords(),
     number = number,
     zipcode = zipcode,
     latitude = latitude,

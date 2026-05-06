@@ -3,9 +3,11 @@ package com.deymervilla.testfakestore.ui.features.profile
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,6 +26,12 @@ import com.deymervilla.testfakestore.ui.presentation.components.InputCompose
 import com.deymervilla.testfakestore.ui.presentation.components.ProfileToolbarCompose
 import com.deymervilla.testfakestore.ui.presentation.theme.FakeStoreTheme
 
+private data class FieldConfig(
+    val field: EditableField,
+    val labelRes: Int,
+    val keyboardType: KeyboardType
+)
+
 @Composable
 fun ProfileScreenCompose(
     viewModel: ProfileScreenViewModel = hiltViewModel(),
@@ -31,11 +39,21 @@ fun ProfileScreenCompose(
 ) {
     val uiState by viewModel.profileUiState.collectAsState()
     val userModel by viewModel.userModel.collectAsState()
+    val savedUserModel by viewModel.savedUserModel.collectAsState()
+    val savingField by viewModel.savingField.collectAsState()
+    val failedField by viewModel.failedField.collectAsState()
 
     when(uiState) {
-        is ProfileUiState.Success -> BodyCompose(
-            actions = attributes.actions,
-            userModel = userModel
+        is ProfileUiState.Success,
+        is ProfileUiState.LoadingUpdate,
+        is ProfileUiState.SuccessUpdate -> BodyCompose(
+            userModel = userModel,
+            savedUserModel = savedUserModel,
+            savingField = savingField,
+            failedField = failedField,
+            onBackClick = { attributes.actions.onPrimaryAction.invoke() },
+            onValueChange = viewModel::onFieldValueChange,
+            onSaveField = viewModel::updateUser
         )
         is ProfileUiState.Loading -> LoadingScreenCompose()
         is ProfileUiState.ConnectionError -> ConnectionErrorScreenCompose()
@@ -48,62 +66,63 @@ fun ProfileScreenCompose(
 
 @Composable
 private fun BodyCompose(
-    actions: ProfileScreenActions,
-    userModel: UserModel
+    userModel: UserModel,
+    savedUserModel: UserModel,
+    savingField: EditableField?,
+    failedField: EditableField?,
+    onBackClick: () -> Unit,
+    onValueChange: (EditableField, String) -> Unit,
+    onSaveField: (EditableField) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    val scrollState = rememberScrollState()
+    val fieldConfigs = listOf(
+        FieldConfig(EditableField.FirstName, R.string.first_name, KeyboardType.Text),
+        FieldConfig(EditableField.LastName, R.string.last_name, KeyboardType.Text),
+        FieldConfig(EditableField.Email, R.string.email, KeyboardType.Email),
+        FieldConfig(EditableField.Phone, R.string.phone, KeyboardType.Phone)
+    )
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(scrollState)
+        .imePadding()
+    ) {
         ProfileToolbarCompose(
             modifier = Modifier.padding(vertical = dimensionResource(R.dimen.dimen_16)),
             title = stringResource(R.string.your_profile),
-            imageUrl = "https://i.pravatar.cc/300",
+            imageUrl = userModel.imageUrl,
             fullName = userModel.fullName,
-            onBackClick = { actions.onPrimaryAction.invoke() }
+            onBackClick = onBackClick
         )
-        Spacer(modifier = Modifier.fillMaxWidth().height(dimensionResource(R.dimen.dimen_12)))
-        InputCompose(
-            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.dimen_16)),
-            label = stringResource(R.string.full_name),
-            value = userModel.firstName,
-            originalValue = userModel.firstName,
-            keyboardType = KeyboardType.Text,
-            actionText = stringResource(R.string.change),
-            onValueChange = {},
-            onActionClick = {}
-        )
-        Spacer(modifier = Modifier.fillMaxWidth().height(dimensionResource(R.dimen.dimen_12)))
-        InputCompose(
-            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.dimen_16)),
-            label = stringResource(R.string.full_name),
-            value = userModel.lastName,
-            originalValue = userModel.lastName,
-            keyboardType = KeyboardType.Text,
-            actionText = stringResource(R.string.change),
-            onValueChange = {},
-            onActionClick = {}
-        )
-        Spacer(modifier = Modifier.fillMaxWidth().height(dimensionResource(R.dimen.dimen_12)))
-        InputCompose(
-            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.dimen_16)),
-            label = stringResource(R.string.email),
-            value = userModel.email,
-            originalValue = userModel.email,
-            keyboardType = KeyboardType.Email,
-            actionText = stringResource(R.string.change),
-            onValueChange = {},
-            onActionClick = {}
-        )
-        Spacer(modifier = Modifier.fillMaxWidth().height(dimensionResource(R.dimen.dimen_12)))
-        InputCompose(
-            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.dimen_16)),
-            label = stringResource(R.string.phone),
-            value = userModel.phone,
-            originalValue = userModel.phone,
-            keyboardType = KeyboardType.Phone,
-            actionText = stringResource(R.string.change),
-            onValueChange = {},
-            onActionClick = {}
-        )
-        Spacer(modifier = Modifier.fillMaxWidth().height(dimensionResource(R.dimen.dimen_12)))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dimen_12)))
+        fieldConfigs.forEach { config ->
+            val currentValue = when (config.field) {
+                EditableField.FirstName -> userModel.firstName
+                EditableField.LastName -> userModel.lastName
+                EditableField.Email -> userModel.email
+                EditableField.Phone -> userModel.phone
+            }
+
+            val originalValue = when (config.field) {
+                EditableField.FirstName -> savedUserModel.firstName
+                EditableField.LastName -> savedUserModel.lastName
+                EditableField.Email -> savedUserModel.email
+                EditableField.Phone -> savedUserModel.phone
+            }
+
+            InputCompose(
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.dimen_16)),
+                label = stringResource(config.labelRes),
+                value = currentValue,
+                originalValue = originalValue,
+                isLoading = savingField == config.field,
+                errorState = failedField == config.field,
+                keyboardType = config.keyboardType,
+                onValueChange = { newValue -> onValueChange(config.field, newValue) },
+                onActionClick = { onSaveField(config.field) }
+            )
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.dimen_12)))
+        }
+
         InputCompose(
             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.dimen_16)),
             label = stringResource(R.string.full_address),
@@ -117,28 +136,32 @@ private fun BodyCompose(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true, name = "1. Default - sin cambios")
 @Composable
-private fun ProfileScreenSuccessPreview() {
+private fun BodyComposeDefaultPreview() {
+    val sampleSavedUser = UserModel(
+        id = 1,
+        username = "jdoe",
+        email = "john.doe@example.com",
+        phone = "+1 555 1234",
+        firstName = "John",
+        lastName = "Doe",
+        city = "Springfield",
+        street = "Main Street",
+        number = 123,
+        zipcode = "12345",
+        latitude = "40.7128",
+        longitude = "-74.0060",
+    )
     FakeStoreTheme {
         BodyCompose(
-            actions = ProfileScreenActions(
-                onPrimaryAction = {}
-            ),
-            userModel = UserModel(
-                id = 1,
-                username = "jdoe",
-                email = "john.doe@example.com",
-                phone = "+1 555 1234",
-                firstName = "John",
-                lastName = "Doe",
-                city = "Springfield",
-                street = "Main Street",
-                number = 123,
-                zipcode = "12345",
-                latitude = "40.7128",
-                longitude = "-74.0060"
-            )
+            userModel = sampleSavedUser,
+            savedUserModel = sampleSavedUser,
+            savingField = null,
+            failedField = null,
+            onBackClick = {},
+            onValueChange = { _, _ -> },
+            onSaveField = {}
         )
     }
 }

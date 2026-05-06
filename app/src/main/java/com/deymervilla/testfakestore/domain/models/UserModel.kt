@@ -26,6 +26,9 @@ data class UserModel(
             if (city.isNotBlank()) append(", $city")
         }
 
+    val imageUrl: String
+        get() = "https://i.pravatar.cc/500"
+
     val locationMapUrl: String
         get() = "https://www.google.com/maps?q=$latitude,$longitude"
 }
