@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">Fake Store</string>
+
+    <string name="retry">Retry</string>
+    <string name="change">Change</string>
+    <string name="see_all">See all</string>
+
+    <string name="connection_error">Connection Error</string>
+    <string name="connection_error_message">There was an error connecting to the server. Please check your internet connection and try again.</string>
+    <string name="error_generic">An error occurred. Please try again later.</string>
+
+    <string name="title_welcome">Technical Test Android</string>
+    <string name="legend_welcome">A catalog application designed to explore and manage the wide variety of products provided by the Fake Store API for technical assessments.</string>
+
+    <string name="location">Location</string>
+    <string name="getting_location">Getting location…</string>
+    <string name="search_products">Search products…</string>
+    <string name="filter">Filter</string>
+    <string name="profile">Profile</string>
+    <string name="set_location">Set your delivery address</string>
+    <string name="your_favorites">Your favorites</string>
+    <string name="reviews">Reviews</string>
+    <string name="price">Price</string>
+    <string name="category">Category</string>
+
+    <string name="your_profile">Your Profile</string>
+    <string name="full_name">Full name</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="full_address">Full address</string>
+
 </resources>
