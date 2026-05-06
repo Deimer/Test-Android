@@ -1,6 +1,6 @@
 # FakeStore App
 
-Aplicación Android que consume la [Fake Store API](https://fakestoreapi.com), desarrollada como prueba técnica con las últimas prácticas de desarrollo Android moderno.
+Aplicación Android que consume la [Fake Store API](https://fakestoreapi.com), desarrollada como prueba técnica con las últimas prácticas de desarrollo en Android.
 
 ## Capturas de Pantalla
 https://github.com/user-attachments/assets/820198a2-2934-42c3-b841-3dc914f3001c
