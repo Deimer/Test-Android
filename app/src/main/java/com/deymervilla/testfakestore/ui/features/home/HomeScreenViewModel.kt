@@ -14,14 +14,18 @@ import com.deymervilla.testfakestore.ui.utils.launchIn
 import com.deymervilla.testfakestore.ui.utils.map
 import com.deymervilla.testfakestore.ui.utils.start
 import com.deymervilla.testfakestore.ui.utils.success
+import com.deymervilla.testfakestore.ui.utils.withMinDelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 sealed class HomeUiState {
@@ -42,6 +46,9 @@ class HomeScreenViewModel @Inject constructor(
     private val _homeUiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val homeUiState = _homeUiState.asStateFlow()
 
+    private val _isLocationLoading = MutableStateFlow(false)
+    val isLocationLoading: StateFlow<Boolean> = _isLocationLoading.asStateFlow()
+
     private val _userLocation = MutableStateFlow("")
     val userLocation: StateFlow<String> = _userLocation.asStateFlow()
 
@@ -51,24 +58,25 @@ class HomeScreenViewModel @Inject constructor(
     private val _favoriteList = MutableStateFlow<List<ProductModel>>(emptyList())
     val favoriteList: StateFlow<List<ProductModel>> = _favoriteList.asStateFlow()
 
-    init { getProducts() }
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
 
-    fun fetchUserLocation() {
-        fetchLocationUserCase().start {
-            _homeUiState.emit(HomeUiState.Loading)
-        }.map { fullAddress ->
-            _userLocation.value = fullAddress
-        }.success {
-            _homeUiState.emit(HomeUiState.Success)
-        }.failure { exception ->
-            exception.isIOEx {
-                _homeUiState.emit(HomeUiState.ConnectionError)
-            }
-            exception.default {
-                _homeUiState.emit(HomeUiState.Error(exception.message.orEmpty()))
-            }
-        }.launchIn(viewModelScope, ioDispatcher)
-    }
+    val searchSuggestions: StateFlow<List<ProductModel>> = combine(
+        _productList,
+        _searchQuery
+    ) { products, query ->
+        if (query.isEmpty()) {
+            emptyList()
+        } else {
+            products.filter { it.title.contains(query, ignoreCase = true) }
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
+    init { getProducts() }
 
     private fun getProducts() {
         fetchProductsUseCase().start {
@@ -86,6 +94,7 @@ class HomeScreenViewModel @Inject constructor(
             }
         }.onCompletion {
             getFavorites()
+            getLocation()
         }.launchIn(viewModelScope, ioDispatcher)
     }
 
@@ -95,7 +104,22 @@ class HomeScreenViewModel @Inject constructor(
             _homeUiState.emit(HomeUiState.Success)
         }.catch { exception ->
             _homeUiState.emit(HomeUiState.Error(exception.message))
-        }
-        .launchIn(viewModelScope, ioDispatcher)
+        }.launchIn(viewModelScope, ioDispatcher)
+    }
+
+    fun getLocation() {
+        fetchLocationUserCase().withMinDelay(700).start {
+            _isLocationLoading.value = true
+        }.map { fullAddress ->
+            _userLocation.value = fullAddress
+        }.success {
+            _isLocationLoading.value = false
+        }.failure { exception ->
+            _isLocationLoading.value = false
+        }.launchIn(viewModelScope, ioDispatcher)
+    }
+
+    fun onSearchChange(newQuery: String) {
+        _searchQuery.value = newQuery
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -26,6 +27,8 @@ import com.deymervilla.testfakestore.ui.presentation.components.CardListCompose
 import com.deymervilla.testfakestore.ui.presentation.components.FavoriteItemUI
 import com.deymervilla.testfakestore.ui.presentation.components.FavoriteSectionCompose
 import com.deymervilla.testfakestore.ui.presentation.components.HomeToolbar
+import com.deymervilla.testfakestore.ui.presentation.components.SearchFieldCompose
+import com.deymervilla.testfakestore.ui.presentation.components.SearchItemUi
 
 @Composable
 fun HomeScreenCompose(
@@ -33,17 +36,31 @@ fun HomeScreenCompose(
     attributes: HomeScreenAttributes
 ) {
     val uiState by viewModel.homeUiState.collectAsState()
+    val isLocationLoading by viewModel.isLocationLoading.collectAsState()
     val userLocation by viewModel.userLocation.collectAsState()
     val productList by viewModel.productList.collectAsState()
     val favoriteList by viewModel.favoriteList.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val searchSuggestions by viewModel.searchSuggestions.collectAsState()
 
     when(uiState) {
         is HomeUiState.Success -> BodyCompose(
-            userLocation = userLocation,
             actions = attributes.actions,
+            isLocationLoading = isLocationLoading,
+            userLocation = userLocation,
             productList = productList,
             favoriteList = favoriteList,
-            onLocationClick = viewModel::fetchUserLocation
+            searchQuery = searchQuery,
+            searchSuggestions = searchSuggestions.map { item ->
+                SearchItemUi(
+                    id = item.id,
+                    name = item.title,
+                    isFavorite = item.isFavorite,
+                    metadata = item.description
+                )
+            },
+            onSearchChange = viewModel::onSearchChange,
+            onLocationClick = viewModel::getLocation
         )
         is HomeUiState.Loading -> LoadingScreenCompose()
         is HomeUiState.ConnectionError -> ConnectionErrorScreenCompose()
@@ -56,20 +73,33 @@ fun HomeScreenCompose(
 
 @Composable
 private fun BodyCompose(
-    userLocation: String? = null,
     actions: HomeScreenActions,
+    isLocationLoading: Boolean,
+    userLocation: String? = null,
     productList: List<ProductModel>,
     favoriteList: List<ProductModel>,
+    searchQuery: String,
+    searchSuggestions: List<SearchItemUi>,
+    onSearchChange: (String) -> Unit,
     onLocationClick: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         HomeToolbar(
             location = userLocation,
-            searchQuery = "",
-            onSearchChange = {},
-            onFilterClick = {},
+            isLocationLoading = isLocationLoading,
             onProfileClick = { actions.onTertiaryAction.invoke() },
             onLocationClick = { onLocationClick.invoke() }
+        )
+        SearchFieldCompose(
+            modifier = Modifier.padding(
+                start = dimensionResource(R.dimen.dimen_16),
+                end = dimensionResource(R.dimen.dimen_16)
+            ),
+            searchQuery = searchQuery,
+            onSearchChange = onSearchChange,
+            searchResults = searchSuggestions,
+            onFilterClick = {},
+            onItemClick = { id -> actions.onSecondaryAction.invoke(id) }
         )
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -164,6 +194,7 @@ private fun BodyComposePreview() {
     ) {
         BodyCompose(
             userLocation = "New York, USA",
+            isLocationLoading = true,
             actions = HomeScreenActions(
                 onPrimaryAction = {},
                 onSecondaryAction = {},
@@ -171,6 +202,9 @@ private fun BodyComposePreview() {
             ),
             productList = mockProducts,
             favoriteList = mockProducts,
+            searchQuery = "",
+            searchSuggestions = emptyList(),
+            onSearchChange = {},
             onLocationClick = {}
         )
     }

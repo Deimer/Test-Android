@@ -13,6 +13,7 @@
     <string name="legend_welcome">A catalog application designed to explore and manage the wide variety of products provided by the Fake Store API for technical assessments.</string>
 
     <string name="location">Location</string>
+    <string name="getting_location">Getting location…</string>
     <string name="search_products">Search products…</string>
     <string name="filter">Filter</string>
     <string name="profile">Profile</string>
