@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
-    id("dagger.hilt.android.plugin")
 }
 
 val databaseDebug = providers.gradleProperty("DATABASE_DEBUG").get()

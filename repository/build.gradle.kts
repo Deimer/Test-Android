@@ -4,11 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.ksp)
 }
 
-val urlDebug = providers.gradleProperty("URL_DEBUG").get()
-val urlRelease = providers.gradleProperty("URL_RELEASE").get()
-
 android {
-    namespace = "com.deymervilla.network"
+    namespace = "com.deymervilla.repository"
     compileSdk {
         version = release(36)
     }
@@ -27,18 +24,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField(
-                "String", "BASE_URL", urlDebug
-            )
         }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
-            )
-            buildConfigField(
-                "String", "BASE_URL", urlRelease
             )
         }
     }
@@ -49,23 +40,23 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 dependencies {
-    //Kotlin
-    implementation(libs.androidx.core.ktx)
-    //DI
-    implementation(libs.hilt.android)
+    //Module
+    implementation(projects.datasource)
+    //Kotlin core
+    implementation(libs.core.ktx)
+    //Hilt
+    api(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    //Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.logging.interceptor)
-    implementation(libs.retrofit.converter.gson)
     //Test
     testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    //Robolectric
+    testImplementation(libs.robolectric.test)
+    //Mockito
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.mockito.inline)
