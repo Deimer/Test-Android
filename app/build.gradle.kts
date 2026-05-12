@@ -7,11 +7,6 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
-val urlDebug = providers.gradleProperty("URL_DEBUG").get()
-val urlRelease = providers.gradleProperty("URL_RELEASE").get()
-val databaseDebug = providers.gradleProperty("DATABASE_DEBUG").get()
-val databaseRelease = providers.gradleProperty("DATABASE_RELEASE").get()
-
 android {
     namespace = "com.deymervilla.testfakestore"
     compileSdk {
@@ -38,24 +33,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField(
-                "String", "BASE_URL", urlDebug
-            )
-            buildConfigField(
-                "String", "DATABASE_NAME", databaseDebug
-            )
         }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
-            )
-            buildConfigField(
-                "String", "BASE_URL", urlRelease
-            )
-            buildConfigField(
-                "String", "DATABASE_NAME", databaseRelease
             )
         }
     }
@@ -78,6 +61,8 @@ android {
 }
 
 dependencies {
+    //Module
+    implementation(projects.usecase)
     //Kotlin
     implementation(libs.androidx.core.ktx)
     //Lifecycle
@@ -85,13 +70,6 @@ dependencies {
     //DI
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    //Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.logging.interceptor)
-    implementation(libs.retrofit.converter.gson)
-    //Room database
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
     //Compose
     implementation(libs.activity.compose)
     implementation(libs.compose.ui)

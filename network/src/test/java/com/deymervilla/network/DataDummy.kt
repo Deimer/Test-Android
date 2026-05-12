@@ -1,0 +1,82 @@
+package com.deymervilla.network
+
+import com.deymervilla.network.dto.AddressDTO
+import com.deymervilla.network.dto.GeolocationDTO
+import com.deymervilla.network.dto.NameDTO
+import com.deymervilla.network.dto.ProductDTO
+import com.deymervilla.network.dto.RatingDTO
+import com.deymervilla.network.dto.UserDTO
+
+fun dummyProductDTO(
+    id: Int = 1,
+    title: String = "Dummy Product",
+    price: Double = 9.99,
+    description: String = "Dummy description",
+    category: String = "dummy category",
+    image: String = "https://dummy.com/image.jpg",
+    rating: RatingDTO? = dummyRatingDTO()
+) = ProductDTO(
+    id = id,
+    title = title,
+    price = price,
+    description = description,
+    category = category,
+    image = image,
+    rating = rating
+)
+
+fun dummyRatingDTO(
+    rate: Double = 4.5,
+    count: Int = 100
+) = RatingDTO(
+    rate = rate,
+    count = count
+)
+
+fun dummyUserDTO(
+    id: Int = 1,
+    username: String = "johndoe",
+    email: String = "john@dummy.com",
+    password: String = "dummypass",
+    phone: String = "123-456-7890",
+    name: NameDTO? = dummyNameDTO(),
+    address: AddressDTO? = dummyAddressDTO()
+) = UserDTO(
+    id = id,
+    username = username,
+    email = email,
+    password = password,
+    phone = phone,
+    name = name,
+    address = address
+)
+
+fun dummyNameDTO(
+    firstName: String = "John",
+    lastName: String = "Doe"
+) = NameDTO(
+    firstName = firstName,
+    lastName = lastName
+)
+
+fun dummyAddressDTO(
+    city: String = "Dummy City",
+    street: String = "Dummy Street",
+    number: Int = 42,
+    zipcode: String = "12345",
+    geolocation: GeolocationDTO? = dummyGeolocationDTO()
+) = AddressDTO(
+    city = city,
+    street = street,
+    number = number,
+    zipcode = zipcode,
+    geolocation = geolocation
+)
+
+fun dummyGeolocationDTO(
+    latitude: String = "40.7128",
+    longitude: String = "-74.0060"
+) = GeolocationDTO(
+    latitude = latitude,
+    longitude = longitude
+)
