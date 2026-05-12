@@ -19,7 +19,10 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Fake Store"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "FakeStore"
 include(":app")
 include(":network")
 include(":database")
+include(":datasource")
