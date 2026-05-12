@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Fake Store"
 include(":app")
 include(":network")
+include(":database")
